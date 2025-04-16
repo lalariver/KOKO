@@ -33,11 +33,16 @@ class FriendsListViewController: UIViewController {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.separatorStyle = .none
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(refreshPulled), for: .valueChanged)
         return tableView
     }()
+    private let refreshControl = UIRefreshControl()
     
     private lazy var emptyView = EmptyView()
     
+    public let searchEvent = PassthroughSubject<Bool, Never>()
+
     private let viewModel: FriendsViewModel
     
     private var cancellables = Set<AnyCancellable>()
@@ -45,6 +50,7 @@ class FriendsListViewController: UIViewController {
     init(viewModel: FriendsViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
+        self.view.backgroundColor = .white
     }
     
     required init?(coder: NSCoder) {
@@ -110,6 +116,15 @@ class FriendsListViewController: UIViewController {
     @objc func dismissKeyboard() {
         view.endEditing(true)
     }
+    
+    @objc private func refreshPulled() {
+        //        viewModel.fetchData()
+        DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
+            DispatchQueue.main.async {
+                self.refreshControl.endRefreshing()
+            }
+        }
+    }
     /*
     // MARK: - Navigation
 
@@ -149,5 +164,13 @@ extension FriendsListViewController: UISearchBarDelegate {
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder() // 隱藏鍵盤
+    }
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchEvent.send(true)
+    }
+    
+    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
+        searchEvent.send(false)
     }
 }

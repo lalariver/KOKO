@@ -34,6 +34,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		CEB508292DAE8F8400C08B5D /* Exceptions for "KOKO" folder in "KOKOTests" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Network/FriendRespondModel.swift,
+				Network/NetworkService.swift,
+			);
+			target = CEF01A512D546756005F34D6 /* KOKOTests */;
+		};
 		CEF01A642D546756005F34D6 /* Exceptions for "KOKO" folder in "KOKO" target */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
@@ -48,6 +56,7 @@
 			isa = PBXFileSystemSynchronizedRootGroup;
 			exceptions = (
 				CEF01A642D546756005F34D6 /* Exceptions for "KOKO" folder in "KOKO" target */,
+				CEB508292DAE8F8400C08B5D /* Exceptions for "KOKO" folder in "KOKOTests" target */,
 			);
 			path = KOKO;
 			sourceTree = "<group>";

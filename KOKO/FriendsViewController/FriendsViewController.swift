@@ -72,25 +72,46 @@ class FriendsViewController: UIViewController {
         return pvc
     }()
     
-    private let pages: [UIViewController]
+    private var pages: [UIViewController] = []
     
+    private lazy var friendsListVC = FriendsListViewController(viewModel: viewModel)
+
     private let viewModel = FriendsViewModel()
     
     private var cancellables = Set<AnyCancellable>()
-
-    init() {
-        self.pages = [FriendsListViewController(viewModel: viewModel), UIViewController()]
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        setPages()
         setupView()
         setupPageViewController()
+        binding()
+    }
+    
+    private func binding() {
+        friendsListVC.searchEvent.sink { [weak self] bool in
+            guard let self = self else { return }
+            if bool {
+                pageViewController.view.snp.remakeConstraints { make in
+                    make.top.equalTo(self.topView.snp.bottom)
+                    make.left.bottom.right.equalToSuperview()
+                }
+            } else {
+                pageViewController.view.snp.remakeConstraints { make in
+                    make.top.equalTo(self.lineView.snp.bottom)
+                    make.leading.trailing.bottom.equalToSuperview()
+                }
+            }
+            
+            UIView.animate(withDuration: 0.3) {
+                self.view.layoutIfNeeded()
+            }
+        }.store(in: &cancellables)
+    }
+    
+    private func setPages() {
+        pages.append(friendsListVC)
+        pages.append(UIViewController())
     }
 
     private func setupView() {

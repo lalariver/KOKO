@@ -20,7 +20,7 @@ class FriendsViewModel {
         
         // 模擬網路下載
 //        Task {
-//            await self.fetchDate()
+//            await self.fetchData()
 //        }
     }
     
@@ -65,7 +65,7 @@ class FriendsViewModel {
         }
     }
 
-    private func fetchDate() async {
+    public func fetchData() async {
         do {
             let friends: FriendRespondModel = try await NetworkService.shared.request(api: .getFriends)
             print("Fetched Friends:", friends)
